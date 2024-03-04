@@ -17,7 +17,12 @@ app.use(expressSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+passport.serializeUser((user, done) => {
+    userRoutes.serializeUser();
+});
+passport.deserializeUser((user, done) => {
+    userRoutes.deserializeUser();
+});
 require('./config/passport')(passport);
 const corsOptions = {
     origin: 'http://localhost:4200', 

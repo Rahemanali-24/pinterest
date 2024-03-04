@@ -38,7 +38,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-    res.send("hii");
+    res.json({ message: "hii" });
+
+
 });
 
 router.get('/profile',isLoggedIn,function(req,res,next){
@@ -77,12 +79,30 @@ router.post("/register", function(req, res, next) {
 });
 
 
+router.post("/register", function(req, res, next) {
+    const { email, username, fullName } = req.body;
+    const userData = new userModel({ email, username, fullName });
+
+    userModel.register(userData, req.body.password, function(err, user) {
+        if (err) {
+            console.error(err);
+            console.log("backend register errrorrrrrr");
+            return res.status(500).send(err);
+        }
+        passport.authenticate("local")(req, res, function() {
+
+            res.json({ message: "Registration successful", user });
+             });
+    });
+});
+
+
 
 router.post("/login",passport.authenticate("local",{
     successRedirect:"/profile",
     failureRedirect:"/",
 }),function(req,res,next){
-   
+    res.json({ message: "Login successful", user: req.user });
 })
 
 
