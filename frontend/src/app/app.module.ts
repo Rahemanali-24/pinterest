@@ -8,13 +8,15 @@ import { LoginComponent } from './feature/login/login.component';
 import { ProfileComponent } from './feature/profile/profile.component';
 import { RegisterComponent } from './feature/register/register.component';
 import { FormsModule } from '@angular/forms';
+import { FeedComponent } from './feature/feed/feed.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ProfileComponent,
-    RegisterComponent
+    RegisterComponent,
+    FeedComponent
   ],
   imports: [
     BrowserModule,

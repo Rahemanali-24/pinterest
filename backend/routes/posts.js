@@ -44,7 +44,9 @@ const mongoose = require("mongoose");
 
 
 
-
+router.get('/feed',function(req,res,next){
+    res.send('Hi feed');
+})
 
 
 module.exports = router;
