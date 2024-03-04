@@ -29,7 +29,15 @@ const passport = require('passport');
 
 
 
-router.get('/',function(req,res,next){
+router.get('/', function(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect("/profile");
+    } else {
+        next(); 
+    }
+});
+
+router.get('/', function(req, res, next) {
     res.send("hii");
 });
 
@@ -39,16 +47,35 @@ router.get('/profile',isLoggedIn,function(req,res,next){
 
 
 
-router.post("/register",function(req,res,next){
-    const {username,email,fullName} = req.body;
-    const userData = new userModel({username,email,fullName});
+// router.post("/register",function(req,res,next){
+//     const {email,username,fullName} = req.body; 
+//     const userData = new userModel({email,username,fullName});
 
-    userModel.register(userData,req.body.password).then(function(){
-       passport.authenticate("local",req,res,function(){
-        res.redirect("/profile");
-       })
+//     userModel.register(userData,req.body.password).then(function(){
+//        passport.authenticate("local",req,res,function(){
+//         res.redirect("/profile");
+//        })
+//     });
+// })
+
+
+router.post("/register", function(req, res, next) {
+    const { email, username, fullName } = req.body;
+    const userData = new userModel({ email, username, fullName });
+
+    userModel.register(userData, req.body.password, function(err, user) {
+        if (err) {
+            console.error(err);
+            console.log("backend register errrorrrrrr");
+            return res.status(500).send(err);
+        }
+        passport.authenticate("local")(req, res, function() {
+
+            res.json({ message: "Registration successful", user });
+             });
     });
-})
+});
+
 
 
 router.post("/login",passport.authenticate("local",{
