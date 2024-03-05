@@ -44,6 +44,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/profile',isLoggedIn,function(req,res,next){
+    
     res.send("Profile");
 });
 
@@ -74,12 +75,22 @@ router.post("/register", function(req, res, next) {
 
 
 
-router.post("/login",passport.authenticate("local",{
-    successRedirect:"/profile",
-    failureRedirect:"/",
-}),function(req,res,next){
-    res.json({ message: "Login successful", user: req.user });
-})
+router.post("/login", function(req, res, next) {
+    passport.authenticate("local", { failureFlash: true }, function(err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.status(401).json({ message: "Authentication failed", flash: req.flash('error') });
+        }
+        req.logIn(user, function(err) {
+            if (err) {
+                return next(err);
+            }
+            res.json({ message: "Login successful", user: req.user, flash: req.flash('success') });
+        });
+    })(req, res, next);
+});
 
 
 router.get("/logout",function(req,res){

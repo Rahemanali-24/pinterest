@@ -12,17 +12,13 @@ export class LoginComponent {
   username: string = '';
   constructor(private apiService: ApiService,private router:Router) {}
   
-  loginUser():void{
+  loginUser(): void {
     this.apiService.login(this.username, this.password).subscribe({
       next: (response) => {
         console.log('Response:', response); 
-        try {
-          const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-          console.log('Parsed JSON:', jsonResponse);   
-          this.router.navigate(['profile']);         
-        } catch (err) {
-          console.error('Error parsing JSON:', err);
-        }
+        // Assuming response contains a token upon successful login
+        localStorage.setItem('token', response.token);
+        this.router.navigate(['profile']);
       },
       error: (error) => {
         console.log('Error occurred during login', error);

@@ -4,12 +4,13 @@ import { LoginComponent } from './feature/login/login.component';
 import { ProfileComponent } from './feature/profile/profile.component';
 import { RegisterComponent } from './feature/register/register.component';
 import { FeedComponent } from './feature/feed/feed.component';
+import { AuthGuard } from './shared/auth.guard';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'profile', component: ProfileComponent,  },
-  { path: 'feed', component: FeedComponent,  },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'feed', component: FeedComponent, canActivate: [AuthGuard] }, 
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' } 
 ];

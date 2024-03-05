@@ -10,14 +10,14 @@ const db = require('./db');
 
 const expressSession = require('express-session');
 const passport = require('passport');
-
+const flash = require('connect-flash');
 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-
+app.use(flash());
 app.use(expressSession({
     resave:false,
     saveUninitialized:false,

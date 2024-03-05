@@ -20,6 +20,7 @@ import { ApiService } from 'src/app/shared/api.service';
           try {
             const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
             console.log('Parsed JSON:', jsonResponse);   
+            localStorage.setItem('token', response.token);
             this.router.navigate(['login']);         
           } catch (err) {
             console.error('Error parsing JSON:', err);
